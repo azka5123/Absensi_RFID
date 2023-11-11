@@ -1,0 +1,53 @@
+.btnback {
+  position: absolute;
+  top: 520px;
+}
+
+@media screen and (max-width: 1013px) {
+  .btnback {
+    position: absolute;
+    top: 380px;
+  }
+}
+
+@media screen and (min-width: 1013px) and (max-width: 1300px) {
+  .btnback {
+    position: absolute;
+    top: 450px;
+  }
+}
+
+.iconjur {
+  width: 1.5rem;
+}
+
+.iconjur:hover {
+  transform: scale(1.2);
+}
+
+/* .run {
+  cursor: pointer;
+  transition: transform 0.5s ease-in-out;
+}
+
+.run:hover {
+  animation: run 2s infinite;
+}
+
+@keyframes run {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(50px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+} */
