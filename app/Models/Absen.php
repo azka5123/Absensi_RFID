@@ -13,7 +13,8 @@ class Absen extends Model
         'student_id',
         'jam_masuk',
         'jam_keluar',
-        'keterangan'
+        'keterangan',
+        'image',
     ];
 
 

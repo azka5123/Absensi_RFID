@@ -1,3 +1,40 @@
+const mqtt_broker = "broker.hivemq.com";
+const mqtt_port = 8000;
+const mqttTopic = "uid_topic";
+
+const clientId = "webClient_" + new Date().getTime();
+const client = new Paho.MQTT.Client(mqtt_broker, mqtt_port, clientId);
+
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+const options = {
+  onSuccess: onConnect,
+  onFailure: onFailure,
+};
+
+client.connect(options);
+
+function onConnect() {
+  console.log("Connected to MQTT broker");
+  client.subscribe(mqttTopic);
+}
+
+function onFailure(message) {
+  console.log("Connection failed: " + message.errorMessage);
+}
+
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+    console.log("Connection lost: " + responseObject.errorMessage);
+  }
+}
+
+function onMessageArrived(message) {
+  const uid = message.payloadString;
+  console.log("Received UID: " + uid);
+  $("#uid").val(uid);
+}
 // // Membuat objek WebSocket
 // var socket = new WebSocket("ws://127.0.0.1:6001/app/ABCDEFG"); // Ganti dengan alamat server WebSocket Anda
 

@@ -9,6 +9,7 @@ use App\Services\WhatsappSend;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ApiAbsenController extends Controller
 {
@@ -17,8 +18,11 @@ class ApiAbsenController extends Controller
         $request->validate([
             'uid' => 'required',
         ]);
-
         $student = Student::where('uid', $request->uid)->first();
+        $now = Carbon::now()->toDateString();
+        $imageData = base64_decode($request->image);
+        $fileName = $student->name . '_' . $now . '.jpeg';
+        Storage::disk('public')->put($fileName, $imageData);
 
         if ($student === null) {
             return response()->json([
@@ -27,7 +31,8 @@ class ApiAbsenController extends Controller
             ]);
         }
 
-        $absenResponse = $this->handleAttendance($student);
+        $absenResponse = $this->handleAttendance($student, $fileName);
+        // $absenResponse = $this->handleAttendance($student);
 
         if ($student->hp_ortu && $absenResponse['ket'] !== 'Tidak Bisa Ambil Absen, Silahkan Pergi ke Ruang BK' && $absenResponse['ket'] !== 'Sudah Ambil Absen') {
             $this->sendWhatsAppMessage($student);
@@ -35,13 +40,14 @@ class ApiAbsenController extends Controller
 
         return response()->json($absenResponse);
     }
-
-    private function handleAttendance(Student $student)
+    private function handleAttendance(Student $student, $imageFileName)
+    // private function handleAttendance(Student $student)
     {
         $now = Carbon::now();
         $today = Carbon::today();
         $tgl = $now->format('Y-m-d H:i');
-        $ket = ($now->hour > 7 && $now->minute >= 30) ? "Terlambat" : "Hadir";
+        $waktu_masuk = Carbon::createFromTime(7, 30, 0);
+        $ket = ($now->isAfter($waktu_masuk)) ? "Terlambat" : "Hadir";
 
         $absen = Absen::where('student_id', $student->id)
             ->whereDate('jam_masuk', $today)
@@ -70,7 +76,10 @@ class ApiAbsenController extends Controller
             'student_id' => $student->id,
             'jam_masuk' => $tgl,
             'keterangan' => $ket,
+            'image' => $imageFileName,
         ]);
+        // dd($store);
+        // die;
         $store->save();
 
         return [
