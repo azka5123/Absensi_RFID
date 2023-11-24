@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
                         ->from('absens')
                         ->whereDate('jam_masuk', $today);
                 })->get();
-
+                // asd
                 foreach ($students as $student) {
                     if ($student->alfa < 3) {
                         $student->alfa += 1;
