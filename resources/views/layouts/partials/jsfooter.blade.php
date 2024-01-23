@@ -1,7 +1,9 @@
 <!-- REQUIRED SCRIPTS -->
 <!-- jQuery -->
-<script src="{{ asset('dist/plugins/jquery/jquery.min.js') }}"></script>
+{{-- <script src="{{ asset('dist/plugins/jquery/jquery.min.js') }}"></script> --}}
 <script src="{{ asset('dist/dist/js/rfid.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js" type="text/javascript"></script>
+<script src="{{ asset('dist/dist/js/verifwajah.js') }}"></script>
 <script src="{{ asset('dist/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <!-- overlayScrollbars -->
 <script src="{{ asset('dist/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
@@ -47,7 +49,7 @@
         $('#example2').DataTable({
             "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
             "info": true,
             "autoWidth": false,
@@ -55,6 +57,7 @@
         });
     });
 </script>
+
 
 
 {{-- Bootstrap CSS --}}

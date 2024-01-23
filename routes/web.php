@@ -1,12 +1,14 @@
 <?php
 
 use App\Http\Controllers\AbsenController;
+use App\Http\Controllers\Api\ApiFaceRecognitionController;
 use App\Http\Controllers\BkController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VerifWajahController;
 use App\Http\Controllers\WaController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -98,10 +100,19 @@ Route::middleware('auth')->group(function () {
     Route::get('/wa/post-devices', [WaController::class, 'postDevice'])->name('post-devices');
     Route::get('/wa/reconnect-devices', [WaController::class, 'reconnectDevice'])->name('reconnect-devices');
     Route::get('/wa/qr-code', [WaController::class, 'getQrCode'])->name('qr-code');
-    //end Whatsapp
+    //end Whatsapp-
+
+    //Verifikasi Wajah
+    // Route::post('/save-model',[VerifWajahController::class,'saveModel'])->name('save-model');
+
+    Route::get('/verif-wajah/show',[VerifWajahController::class,'show'])->name('verif-wajah');
+    Route::post('/verif-wajah/store-face', [VerifWajahController::class, 'faceDetectAndSave']);
+    //end Verifikasi Wajah
 });
 Route::post('/get-uid', [StudentController::class, 'uid']);
 // Route::get('/test', function () {
 //     return View::make('absen.absen_excel');
 // });
 // Route::get('/test2', [AbsenController::class, 'exportTest'])->name('test2');
+
+

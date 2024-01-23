@@ -12,7 +12,7 @@
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
-                            <form action="{{ route('store-user') }}" method="post">
+                            <form action="siswa/store" method="post">
                                 @csrf
                                 <div class="row">
                                     <div class="col col-6">

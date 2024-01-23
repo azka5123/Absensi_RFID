@@ -136,6 +136,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('verif-wajah') }}"
+                            class="nav-link {{ Request::is('verif-wajah') || Request::is('verif-wajah/*') ? 'active' : '' }}">
+                            <img src="{{ asset('dist/dist/img/face-recognition.png') }}" alt="" class="img-fluid iconjur">
+                            <p>
+                                Verifikasi Wajah
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('bk') }}"
                             class="nav-link {{ Request::is('bk') || Request::is('bk/*') ? 'active' : '' }}">
                             <img src="{{ asset('dist/dist/img/bk.png') }}" alt="" class="img-fluid iconjur">
