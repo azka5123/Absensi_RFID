@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('student_id');
             $table->dateTime('jam_masuk')->nullable();
             $table->dateTime('jam_keluar')->nullable();
-            $table->string('keterangan')->nullable();
-            $table->integer('izin')->nullable();
+            $table->string('keterangan',10)->nullable();
+            $table->integer('izin',1)->nullable();
         });
     }
 

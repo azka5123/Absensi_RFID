@@ -16,6 +16,7 @@
                             <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
+                                        <th>No</th>
                                         <th>File</th>
                                         <th>Action</th>
                                     </tr>
@@ -23,13 +24,14 @@
                                 <tbody>
                                     @foreach ($files as $file)
                                         <tr>
-
+                                            <td>{{ $loop->iteration }}</td>
                                             <td>{{ basename($file) }}</td>
                                             <td><a href="{{ route('rekap-download', basename($file)) }}"
                                                     class="btn btn-sm btn-success">
                                                     <i class="bi bi-download"></i>
                                                     Download
-                                                </a></td>
+                                                </a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

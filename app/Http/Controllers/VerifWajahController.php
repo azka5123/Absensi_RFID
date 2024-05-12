@@ -12,14 +12,16 @@ class VerifWajahController extends Controller
 {
     public function show()
     {
-        $user = Student::select('name', 'uid', 'id','kelas','jurusan')->get();
+        $user = Student::select('name', 'uid', 'id', 'kelas', 'jurusan', 'face_trained')->get();
+        // return response()->json($user);
+
         return view('verifWajah.verifwajah_show', compact('user'));
     }
 
     public function faceDetectAndSave(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $image = $request->file('image');
         $id = $request->idSiswa;
@@ -30,17 +32,12 @@ class VerifWajahController extends Controller
             return response()->json(['error' => 'Siswa tidak ditemukan'], 404);
         }
 
-        $response = Http::attach(
-            'files',
-            file_get_contents($image->path()),
-            $image->getClientOriginalName()
-        )
-            ->post('http://api.skybiometry.com/fc/faces/detect.json', [
-                'api_key' => env('API_KEY_skybiometry'),
-                'api_secret' => env('API_SECRET_skybiometry'),
-                'detector' => 'Aggressive',
-                'attributes' => 'all',
-            ]);
+        $response = Http::attach('files', file_get_contents($image->path()), $image->getClientOriginalName())->post('http://api.skybiometry.com/fc/faces/detect.json', [
+            'api_key' => env('API_KEY_skybiometry'),
+            'api_secret' => env('API_SECRET_skybiometry'),
+            'detector' => 'Aggressive',
+            'attributes' => 'all',
+        ]);
         $responseData = json_decode($response->getBody(), true);
 
         if ($responseData['status'] == 'success') {
@@ -56,18 +53,27 @@ class VerifWajahController extends Controller
                     'api_secret' => env('API_SECRET_skybiometry'),
                     'tids' => $tid,
                     'uid' => $student->uid . '@SMKN1TILKAM',
-                    'label' => $student->name
+                    'label' => $student->name,
                 ]);
 
                 $trainResponse = http::get('http://api.skybiometry.com/fc/faces/train.json', [
                     'api_key' => env('API_KEY_skybiometry'),
                     'api_secret' => env('API_SECRET_skybiometry'),
                     'uids' => $student->uid . '@SMKN1TILKAM',
-                    'namespace' => 'SMKN1TILKAM'
+                    'namespace' => 'SMKN1TILKAM',
                 ]);
+                $trainArray = json_decode($trainResponse);
+                // dd($trainArray);
+                // die();
+                if (!empty($trainArray->updated) && isset($trainArray->updated[0])) {
+                    $student->face_trained = $trainArray->updated[0]->training_set_size;
+                } elseif (!empty($trainArray->unchanged) && isset($trainArray->unchanged[0])) {
+                    $student->face_trained = $trainArray->unchanged[0]->training_set_size;
+                }
+                $student->update();
 
                 // Kembalikan respons JSON dari proses penyimpanan TID
-                // return response()->json($saveResponse    ->json());
+                // return response()->json($saveResponse->json());
             } else {
                 return response()->json(['error' => 'Tidak ada tag dalam foto'], 400);
             }

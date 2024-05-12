@@ -38,76 +38,107 @@
                     <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                     <li class="nav-header">MENU</li>
-                    {{-- <li class="nav-item">
-                        <a href="{{ route('dashboard') }}" class="nav-link {{ Request::is('/') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-tachometer-alt"></i>
-                            <p>
-                                Dashboard
-                            </p>
-                        </a>
-                    </li> --}}
-                    <li class="nav-item">
-                        <a href="#"
-                            class="nav-link {{ Request::is('absensi') || Request::is('absensi/*') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/absen.png') }}" alt="" class="img-fluid iconjur">
-                            <p>
-                                Absensi
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="{{ route('absen_dpib') }}"
-                                    class="nav-link {{ Request::is('absensi/dpib') ? 'active' : '' }} ml-2">
-                                    <img src="{{ asset('dist/dist/img/DPIB.png') }}" alt=""
-                                        class="img-fluid iconjur">
-                                    <p>
-                                        Absensi DPIB
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('absen_titl') }}"
-                                    class="nav-link {{ Request::is('absensi/titl') ? 'active' : '' }} ml-2">
-                                    <img src="{{ asset('dist/dist/img/TITL.png') }}" alt=""
-                                        class="img-fluid iconjur">
-                                    <p>
-                                        Absensi TITL
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('absen_tkj') }}"
-                                    class="nav-link {{ Request::is('absensi/tjkt') ? 'active' : '' }} ml-2">
-                                    <img src="{{ asset('dist/dist/img/TKJ.png') }}" alt=""
-                                        class="img-fluid iconjur">
-                                    <p>
-                                        Absensi TJKT
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('absen_tkr') }}"
-                                    class="nav-link {{ Request::is('absensi/tkr') ? 'active' : '' }} ml-2">
-                                    <img src="{{ asset('dist/dist/img/TKR.png') }}" alt=""
-                                        class="img-fluid iconjur">
-                                    <p>
-                                        Absensi TKR
-                                    </p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="{{ route('absen') }}"
-                                    class="nav-link {{ Request::is('absensi/all') ? 'active' : '' }} ml-2">
-                                    <img src="{{ asset('dist/dist/img/Tilkam.png') }}" alt=""
-                                        class="img-fluid iconjur">
-                                    <p>
-                                        Absensi Semua Siswa
-                                    </p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
+                    @if (auth()->user()->role == 'Bimbingan Konseling')
+                        <li class="nav-item">
+                            <a href="#"
+                                class="nav-link {{ Request::is('absensi') || Request::is('absensi/*') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/absen.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Absensi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('absen_dpib') }}"
+                                        class="nav-link {{ Request::is('absensi/dpib') ? 'active' : '' }} ml-2">
+                                        <img src="{{ asset('dist/dist/img/DPIB.png') }}" alt=""
+                                            class="img-fluid iconjur">
+                                        <p>
+                                            Absensi DPIB
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('absen_titl') }}"
+                                        class="nav-link {{ Request::is('absensi/titl') ? 'active' : '' }} ml-2">
+                                        <img src="{{ asset('dist/dist/img/TITL.png') }}" alt=""
+                                            class="img-fluid iconjur">
+                                        <p>
+                                            Absensi TITL
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('absen_tkj') }}"
+                                        class="nav-link {{ Request::is('absensi/tjkt') ? 'active' : '' }} ml-2">
+                                        <img src="{{ asset('dist/dist/img/TKJ.png') }}" alt=""
+                                            class="img-fluid iconjur">
+                                        <p>
+                                            Absensi TJKT
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('absen_tkr') }}"
+                                        class="nav-link {{ Request::is('absensi/tkr') ? 'active' : '' }} ml-2">
+                                        <img src="{{ asset('dist/dist/img/TKR.png') }}" alt=""
+                                            class="img-fluid iconjur">
+                                        <p>
+                                            Absensi TKR
+                                        </p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('absen') }}"
+                                        class="nav-link {{ Request::is('absensi/all') ? 'active' : '' }} ml-2">
+                                        <img src="{{ asset('dist/dist/img/Tilkam.png') }}" alt=""
+                                            class="img-fluid iconjur">
+                                        <p>
+                                            Absensi Semua Siswa
+                                        </p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('sakit-dan-izin') }}"
+                                class="nav-link {{ Request::is('sakit-dan-izin') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/izin.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Sakit dan Izin Siswa
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('bk') }}"
+                                class="nav-link {{ Request::is('bk') || Request::is('bk/*') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/bk.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Bimbingan Konseling
+                                </p>
+                                @if ($notif = App\Models\Student::where('alfa', 3)->orWhere('terlambat', 3)->count())
+                                    <span class="badge badge-danger sidebar-badge">
+                                        {{ $notif }}
+                                    </span>
+                                @endif
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('get-devices') }}"
+                                class="nav-link {{ Request::is('wa') || Request::is('wa/*') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/whatsapp.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Whatsapp Sekolah
+                                </p>
+                            </a>
+                        </li>
+                    @endif
                     <li class="nav-item">
                         <a href="{{ route('rekap-absen') }}"
                             class="nav-link {{ Request::is('rekap/*') ? 'active' : '' }}">
@@ -117,48 +148,28 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('sakit-dan-izin') }}"
-                            class="nav-link {{ Request::is('sakit-dan-izin') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/izin.png') }}" alt="" class="img-fluid iconjur">
-                            <p>
-                                Sakit dan Izin Siswa
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('student') }}"
-                            class="nav-link {{ Request::is('siswa') || Request::is('siswa/*') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/murid.png') }}" alt="" class="img-fluid iconjur">
-                            <p>
-                                Siswa
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('verif-wajah') }}"
-                            class="nav-link {{ Request::is('verif-wajah') || Request::is('verif-wajah/*') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/face-recognition.png') }}" alt="" class="img-fluid iconjur">
-                            <p>
-                                Verifikasi Wajah
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('bk') }}"
-                            class="nav-link {{ Request::is('bk') || Request::is('bk/*') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/bk.png') }}" alt="" class="img-fluid iconjur">
-                            <p>
-                                Bimbingan Konseling
-                            </p>
-                            @if ($notif = App\Models\Student::where('alfa', 3)->orWhere('terlambat', 3)->count())
-                                <span class="badge badge-danger sidebar-badge">
-                                    {{ $notif }}
-                                </span>
-                            @endif
-                        </a>
-                    </li>
+
                     @if (auth()->user()->role == 'Operator')
+                        <li class="nav-item">
+                            <a href="{{ route('student') }}"
+                                class="nav-link {{ Request::is('siswa') || Request::is('siswa/*') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/murid.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Siswa
+                                </p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('verif-wajah') }}"
+                                class="nav-link {{ Request::is('verif-wajah') || Request::is('verif-wajah/*') ? 'active' : '' }}">
+                                <img src="{{ asset('dist/dist/img/face-recognition.png') }}" alt=""
+                                    class="img-fluid iconjur">
+                                <p>
+                                    Verifikasi Wajah
+                                </p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('user') }}"
                                 class="nav-link {{ Request::is('user') || Request::is('user/*') ? 'active' : '' }}">
@@ -170,16 +181,7 @@
                             </a>
                         </li>
                     @endif
-                    <li class="nav-item">
-                        <a href="{{ route('get-devices') }}"
-                            class="nav-link {{ Request::is('wa') || Request::is('wa/*') ? 'active' : '' }}">
-                            <img src="{{ asset('dist/dist/img/whatsapp.png') }}" alt=""
-                                class="img-fluid iconjur">
-                            <p>
-                                Whatsapp Sekolah
-                            </p>
-                        </a>
-                    </li>
+
                     <li class="nav-header">
                         <hr>
                     </li>

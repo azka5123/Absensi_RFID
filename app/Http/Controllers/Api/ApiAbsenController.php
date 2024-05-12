@@ -104,6 +104,11 @@ class ApiAbsenController extends Controller
             'api_secret' => env('API_SECRET_skybiometry'),
             'uids' => $uids . '@SMKN1TILKAM',
         ]);
+        $student = Student::where('uid', $uids)->first();
+        $trainArray = json_decode($response->getBody(), true);
+        $trainSize = $trainArray['updated'][0]['training_set_size'] ?? $trainArray['unchanged'][0]['training_set_size'];
+        $student->face_trained = $trainSize;
+        $student->update();
         // echo $response->body();
     }
 
@@ -139,7 +144,12 @@ class ApiAbsenController extends Controller
             }
         } else {
             // Handle error if the status is not success
-            echo "Error: {$responseData['status']}\n";
+            // echo "Error: {$responseData['status']}\n";
+            return [
+                'uid' => null, // or any default value
+                'confidence' => null, // or any default value
+                'label' => null, // or any default value
+            ];
         }
     }
 
@@ -153,6 +163,7 @@ class ApiAbsenController extends Controller
         $imageData = base64_decode($request->image);
         $fileName = $student->name . '_' . $now . '.jpeg';
         Storage::disk('public')->put($fileName, $imageData);
+        flush();
         if ($student === null) {
             return response()->json([
                 'nama' => "unknown card",
@@ -161,7 +172,6 @@ class ApiAbsenController extends Controller
         }
 
         $absenResponse = $this->handleAttendance($student, $fileName);
-        // $absenResponse = $this->handleAttendance($student);
 
         if ($student->hp_ortu && $absenResponse['ket'] !== 'Tidak Bisa Ambil Absen, Silahkan Pergi ke Ruang BK' && $absenResponse['ket'] !== 'Sudah Ambil Absen') {
             $this->sendWhatsAppMessage($student);
@@ -174,6 +184,7 @@ class ApiAbsenController extends Controller
             $this->faceSave($tid['tid'], $uids, $label);
             $this->faceTrain($uids);
         }
+        flush();
 
         return response()->json($absenResponse);
     }

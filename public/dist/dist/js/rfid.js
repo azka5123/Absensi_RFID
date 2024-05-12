@@ -1,6 +1,6 @@
 const mqtt_broker = "broker.hivemq.com";
 const mqtt_port = 8000;
-const mqttTopic = "uid_topic";
+const mqttTopic = "esp32/smkn1tilkam/uid_topic";
 
 const clientId = "webClient_" + new Date().getTime();
 const client = new Paho.MQTT.Client(mqtt_broker, mqtt_port, clientId);

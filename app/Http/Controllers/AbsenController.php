@@ -25,7 +25,6 @@ class AbsenController extends Controller
         return view('absen.absen_show', compact('absen'));
     }
 
-
     public function show_absen_tkj()
     {
         $now = Carbon::now();
@@ -43,9 +42,12 @@ class AbsenController extends Controller
 
     public function show_absen_tkr()
     {
-        $absen_tkr = Absen::latest()->whereHas('rStudent', function ($query) {
-            $query->where('jurusan', 'TKR');
-        })->with('rStudent')->get();
+        $absen_tkr = Absen::latest()
+            ->whereHas('rStudent', function ($query) {
+                $query->where('jurusan', 'TKR');
+            })
+            ->with('rStudent')
+            ->get();
         $absen_tkr = $absen_tkr->filter(function ($item) {
             $now = Carbon::now();
             $jamMasuk = Carbon::parse($item->jam_masuk);
@@ -57,9 +59,12 @@ class AbsenController extends Controller
 
     public function show_absen_dpib()
     {
-        $absen_dpib = Absen::latest()->whereHas('rStudent', function ($query) {
-            $query->where('jurusan', 'DPIB');
-        })->with('rStudent')->get();
+        $absen_dpib = Absen::latest()
+            ->whereHas('rStudent', function ($query) {
+                $query->where('jurusan', 'DPIB');
+            })
+            ->with('rStudent')
+            ->get();
         $absen_dpib = $absen_dpib->filter(function ($item) {
             $now = Carbon::now();
             $jamMasuk = Carbon::parse($item->jam_masuk);
@@ -71,9 +76,12 @@ class AbsenController extends Controller
 
     public function show_absen_titl()
     {
-        $absen_titl = Absen::latest()->whereHas('rStudent', function ($query) {
-            $query->where('jurusan', 'TITL');
-        })->with('rStudent')->get();
+        $absen_titl = Absen::latest()
+            ->whereHas('rStudent', function ($query) {
+                $query->where('jurusan', 'TITL');
+            })
+            ->with('rStudent')
+            ->get();
         $absen_titl = $absen_titl->filter(function ($item) {
             $now = Carbon::now();
             $jamMasuk = Carbon::parse($item->jam_masuk);
@@ -101,14 +109,14 @@ class AbsenController extends Controller
         $update->jam_keluar = $request->keluar;
         $update->keterangan = $request->keterangan;
         $update->update();
-        return redirect()->route('absen')->with("success", "Data absen berhasil di edit");
+        return redirect()->route('absen')->with('success', 'Data absen berhasil di edit');
     }
 
     public function delete_absen($id)
     {
         $delete = Absen::where('id', $id)->first();
         $delete->delete();
-        return redirect()->route('absen')->with("success", "Data berhasil dihapus");
+        return redirect()->route('absen')->with('success', 'Data berhasil dihapus');
     }
 
     public function sakit_dan_izin()
@@ -121,7 +129,7 @@ class AbsenController extends Controller
     {
         $now = Carbon::now();
         $student_id = $id;
-        $keterangan = "Sakit";
+        $keterangan = 'Sakit';
 
         $existingAbsen = Absen::where('student_id', $student_id)
             ->whereIn('keterangan', ['Sakit', 'Izin'])
@@ -135,9 +143,9 @@ class AbsenController extends Controller
             $absen->jam_masuk = $now;
             $absen->save();
 
-            return back()->with("success", "Data siswa sakit berhasil ditambahkan di tabel absen");
+            return back()->with('success', 'Data siswa sakit berhasil ditambahkan di tabel absen');
         } else {
-            return back()->with("error", "Siswa sudah melakukan absen sakit atau izin");
+            return back()->with('error', 'Siswa sudah melakukan absen sakit atau izin');
         }
     }
 
@@ -145,7 +153,7 @@ class AbsenController extends Controller
     {
         $now = Carbon::now();
         $student_id = $id;
-        $keterangan = "Izin";
+        $keterangan = 'Izin';
 
         $existingAbsen = Absen::where('student_id', $student_id)
             ->whereIn('keterangan', ['Sakit', 'Izin'])
@@ -160,9 +168,9 @@ class AbsenController extends Controller
             $absen->jam_masuk = $now;
             $absen->save();
 
-            return back()->with("success", "Data siswa Izin berhasil ditambahkan di tabel absen");
+            return back()->with('success', 'Data siswa Izin berhasil ditambahkan di tabel absen');
         } else {
-            return back()->with("error", "Siswa sudah melakukan absen sakit atau izin");
+            return back()->with('error', 'Siswa sudah melakukan absen sakit atau izin');
         }
     }
 
@@ -178,13 +186,43 @@ class AbsenController extends Controller
     public function rekap()
     {
         $files = Storage::files('public/exports/excel');
+
+        usort($files, function ($file1, $file2) {
+            return $this->compareFiles($file1, $file2);
+        });
         return view('absen.rekap', compact('files'));
     }
+
+    private function compareFiles($file1, $file2)
+    {
+        preg_match('/\b(\w+)\s(\d{4})\b/', $file1, $matches1);
+        preg_match('/\b(\w+)\s(\d{4})\b/', $file2, $matches2);
+
+        $yearComparison = strcmp($matches1[2], $matches2[2]);
+        if ($yearComparison == 0) {
+            $months = [
+                'Januari' => 1,
+                'Februari' => 2,
+                'Maret' => 3,
+                'April' => 4,
+                'Mei' => 5,
+                'Juni' => 6,
+                'Juli' => 7,
+                'Agustus' => 8,
+                'September' => 9,
+                'Oktober' => 10,
+                'November' => 11,
+                'Desember' => 12,
+            ];
+            $monthComparison = $months[$matches1[1]] - $months[$matches2[1]];
+            return $monthComparison;
+        }
+        return $yearComparison;
+    }
+
     public function download($file)
     {
         $path = storage_path('app/public/exports/excel/' . $file);
-        // dd($path);
-        // die;
         if (file_exists($path)) {
             return response()->download($path, $file);
         } else {

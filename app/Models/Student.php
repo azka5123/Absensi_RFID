@@ -11,7 +11,8 @@ class Student extends Model
 
     protected $fillable = [
         'terlambat',
-        'alfa'
+        'alfa',
+        'face_trained'
     ];
 
     // public function rAbsen()

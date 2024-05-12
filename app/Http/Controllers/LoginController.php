@@ -31,7 +31,11 @@ class LoginController extends Controller
                 Auth::guard()->logout();
                 return redirect()->back()->with('error', 'User not found');
             } else {
-                return redirect()->route('student');
+                if(Auth::user()->role == 'Bimbingan Konseling'){
+                    return redirect()->route('absen');
+                }else{
+                    return redirect()->route('user');
+                }
             }
         } else {
             // Auth::guard()->logout();

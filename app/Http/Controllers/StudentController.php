@@ -50,9 +50,13 @@ class StudentController extends Controller
             'nama' => 'required',
             'nis' => 'required',
             'kelas' => 'required',
-            'jurusan' => 'required'
+            'jurusan' => 'required',
         ]);
 
+        $existingStudent = Student::where('uid', $request->uid)->first();
+        if ($existingStudent) {
+            return back()->with('error', 'UID Sudah ada di database');
+        }
         $store = new Student();
         $store->nomor_kartu = $request->nomor_kartu;
         $store->uid = $request->uid;
@@ -64,7 +68,7 @@ class StudentController extends Controller
             $store->hp_ortu = $request->hp_ortu;
         }
         $store->save();
-        return redirect()->route('student')->with("success", "Data siswa berhasil ditambahkan");
+        return redirect()->route('student')->with('success', 'Data siswa berhasil ditambahkan');
     }
 
     public function edit_student($id)
@@ -82,7 +86,7 @@ class StudentController extends Controller
             'nama' => 'required',
             'nis' => 'required',
             'kelas' => 'required',
-            'jurusan' => 'required'
+            'jurusan' => 'required',
         ]);
 
         $update->nomor_kartu = $request->nomor_kartu;
@@ -91,7 +95,7 @@ class StudentController extends Controller
         $update->nis = $request->nis;
         $update->kelas = $request->kelas;
         $update->jurusan = $request->jurusan;
-        if ($request->hp_ortu == "") {
+        if ($request->hp_ortu == '') {
             $update->hp_ortu = null;
         } else {
             $update->hp_ortu = $request->hp_ortu;
@@ -104,7 +108,7 @@ class StudentController extends Controller
     {
         $delete = Student::where('id', $id)->first();
         $delete->delete();
-        return redirect()->route('student')->with("success", "Data siswa berhasil di edit");
+        return redirect()->route('student')->with('success', 'Data siswa berhasil di edit');
     }
 
     public function naik_kelas()
@@ -122,6 +126,6 @@ class StudentController extends Controller
 
             $student->save();
         });
-        return back()->with("success", "Semua siswa dinaikan ke kelas selanjutnya");
+        return back()->with('success', 'Semua siswa dinaikan ke kelas selanjutnya');
     }
 }

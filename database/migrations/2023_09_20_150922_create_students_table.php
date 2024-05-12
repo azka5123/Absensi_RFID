@@ -13,14 +13,15 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('nis');
-            $table->string('kelas');
-            $table->string('jurusan');
-            $table->integer('terlambat')->nullable();
-            $table->integer('alfa')->nullable();
-            $table->string('uid');
-            $table->string('hp_ortu')->nullable();
+            $table->string('name',55);
+            $table->string('nis',5);
+            $table->string('kelas',2);
+            $table->string('jurusan',10);
+            $table->integer('terlambat',1)->nullable();
+            $table->integer('alfa',1)->nullable();
+            $table->string('uid', 12);
+            $table->string('hp_ortu', 14)->nullable();
+            $table->string('face_trained',4)->nullable();
             $table->timestamps();
         });
     }

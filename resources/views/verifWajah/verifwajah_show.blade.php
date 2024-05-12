@@ -38,6 +38,7 @@
                                         <th>Nama</th>
                                         <th>uid</th>
                                         <th>kelas dan jurusan</th>
+                                        <th>face trained</th>
                                         <th>action</th>
                                     </tr>
                                 </thead>
@@ -48,10 +49,15 @@
                                             <td>{{ $data->name }}</td>
                                             <td>{{ $data->uid }}</td>
                                             <td>{{ $data->kelas }} {{ $data->jurusan }}</td>
+                                            @if ($data->face_trained != null)
+                                                <td>{{ $data->face_trained }}X</td>
+                                            @else
+                                                <td>Wajah Belum Dikenali</td>
+                                            @endif
                                             <td><button type="button" class="btn btn-primary btn-modal" data-toggle="modal"
                                                     data-target="#exampleModal" data-name="{{ $data->name }}"
                                                     data-uid="{{ $data->uid }}" data-id="{{ $data->id }}">
-                                                    Launch demo modal
+                                                    Train Face
                                                 </button>
                                             </td>
                                         </tr>
