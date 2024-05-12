@@ -186,7 +186,6 @@ class AbsenController extends Controller
     public function rekap()
     {
         $files = Storage::files('public/exports/excel');
-
         usort($files, function ($file1, $file2) {
             return $this->compareFiles($file1, $file2);
         });
